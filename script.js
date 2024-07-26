@@ -42,6 +42,12 @@ async function loadCharacters(url) {
             characterNameBG.appendChild(characterName)
             card.appendChild(characterNameBG)
 
+            // Mostrar o modal com as infos do personagem
+            card.onclick = () => {
+                const modal = document.getElementById("modal")
+                modal.style.visibility = "visible"
+            }
+
             mainContent.appendChild(card)
         });
 
@@ -51,6 +57,7 @@ async function loadCharacters(url) {
         nextButton.disabled = !responseJson.next
         backButton.disabled = !responseJson.previous
 
+        nextButton.style.visibility = responseJson.next? "visible" : "hidden"
         backButton.style.visibility = responseJson.previous? "visible" : "hidden"
 
         currentPageUrl = url
@@ -59,4 +66,39 @@ async function loadCharacters(url) {
         alert('Erro ao carregar os personagens')
         console.log(error)
     }
+}
+
+async function loadNextPage() {
+    if (!currentPageUrl) return;
+
+    try {
+        const response = await fetch(currentPageUrl)
+        const responseJson = await response.json()
+
+        await loadCharacters(responseJson.next)
+
+    } catch (error) {
+        console.log(error)
+        alert('Erro ao carregar a próxima página')
+    }
+}
+
+async function loadPreviousPage() {
+    if (!currentPageUrl) return;
+
+    try {
+        const response = await fetch(currentPageUrl)
+        const responseJson = await response.json()
+
+        await loadCharacters(responseJson.previous)
+
+    } catch (error) {
+        console.log(error)
+        alert('Erro ao carregar a página anterior')
+    }
+}
+
+function hideModal() {
+    const modal = document.getElementById("modal")
+    modal.style.visibility = "hidden"
 }
