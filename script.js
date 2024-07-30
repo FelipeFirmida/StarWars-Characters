@@ -46,6 +46,41 @@ async function loadCharacters(url) {
             card.onclick = () => {
                 const modal = document.getElementById("modal")
                 modal.style.visibility = "visible"
+
+                const modalContent = document.getElementById("modal-content")
+                modalContent.innerHTML = ''
+
+                const characterImage = document.createElement('div')
+                characterImage.style.backgroundImage = 
+                `url('https://starwars-visualguide.com/assets/img/characters/${character.url.replace(/\D/g, "")}.jpg')`
+                characterImage.className = "character-image"
+
+                const name = document.createElement("span")
+                name.className = "character-details"
+                name.innerText = `Nome: ${character.name}`
+
+                const characterHeight = document.createElement("span")
+                characterHeight.className = "character-details"
+                characterHeight.innerText = `Altura: ${convertHeight(character.height)}`
+
+                const mass = document.createElement("span")
+                mass.className = "character-details"
+                mass.innerText = `Peso: ${convertMass(character.mass)}`
+
+                const eyeColor = document.createElement("span")
+                eyeColor.className = "character-details"
+                eyeColor.innerText = `Cor dos olhos: ${convertEyeColor(character.eye_color)}`
+
+                const birthYear = document.createElement("span")
+                birthYear.className = "character-details"
+                birthYear.innerText = `Nascimento: ${convertBirthYear(character.birth_year)}`
+
+                modalContent.appendChild(characterImage)
+                modalContent.appendChild(name)
+                modalContent.appendChild(characterHeight)
+                modalContent.appendChild(mass)
+                modalContent.appendChild(eyeColor)
+                modalContent.appendChild(birthYear)
             }
 
             mainContent.appendChild(card)
@@ -101,4 +136,50 @@ async function loadPreviousPage() {
 function hideModal() {
     const modal = document.getElementById("modal")
     modal.style.visibility = "hidden"
+}
+
+function convertEyeColor (eyeColor) {
+    const cores = {
+        blue: "azul",
+        black: "preto",
+        'blue-gray': "cinza-azulado",
+        brown: "marrom",
+        gold: "dourado",
+        green: "verde",
+        'green, yellow': "verde, amarelo",
+        hazel: "avela",
+        orange: "laranja",
+        pink: "rosa",
+        red: "vermelho",
+        'red, blue': "vermelho, azul",
+        white: "branco",
+        yellow: "amarelo",
+        unknown: "desconhecido"
+    };
+
+    return cores[eyeColor.toLowerCase()] || eyeColor;
+}
+
+function convertHeight(height) {
+    if (height === "unknown") {
+        return "desconhecida"
+    }
+
+    return `${(height / 100).toFixed(2)} m`;
+}
+
+function convertMass(mass) {
+    if (mass === "unknown") {
+        return "desconhecido"
+    }
+
+    return `${mass} kg`
+}
+
+function convertBirthYear(birthYear) {
+    if (birthYear === "unknown") {
+        return "desconhecido"
+    }
+
+    return birthYear
 }
